@@ -1,4 +1,5 @@
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+logging.basicConfig(level=logging.DEBUG)
 
 def generate_join_channels_keyboard():
 
@@ -21,10 +22,15 @@ def generate_join_channels_keyboard():
 
 async def check_user_joined_channels(client, user_id, required_channel_ids):
     for channel_id in required_channel_ids:
+        logging.debug(f"Checking membership for user {user_id} in channel {channel_id}")
         try:
             member = await client.get_chat_member(channel_id, user_id)
+            logging.debug(f"User {user_id} membership status in {channel_id}: {member.status}")
             if member.status in ["left", "kicked"]:
+                logging.debug(f"User {user_id} not a member of {channel_id}")
                 return False
-        except Exception:
+        except Exception as e:
+            logging.error(f"Error checking membership for user {user_id} in channel {channel_id}: {e}")
             return False
+    logging.debug(f"User {user_id} is a member of all required channels")
     return True
