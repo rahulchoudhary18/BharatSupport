@@ -1,4 +1,5 @@
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+import logging
 logging.basicConfig(level=logging.DEBUG)
 
 def generate_join_channels_keyboard():
